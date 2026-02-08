@@ -1389,7 +1389,11 @@ def process_atom_features(
         atom_conformer.append(token_atoms_conformer)
         atom_chirality.append(token_atoms_chirality)
         atom_idx += len(token_atoms)
-        atom_conf_restr.append(token_atoms["conformer_restraint"])
+        # Handle case where conformer_restraint field may not exist (e.g., when only using distance restraints)
+        if "conformer_restraint" in token_atoms.dtype.names:
+            atom_conf_restr.append(token_atoms["conformer_restraint"])
+        else:
+            atom_conf_restr.append(np.zeros(len(token_atoms), dtype=np.int32))
 
     disto_coords_ensemble = np.array(disto_coords_ensemble)  # (N_TOK, N_ENS, 3)
 
@@ -1436,7 +1440,11 @@ def process_atom_features(
     ref_atom_name_chars = from_numpy(atom_name).long()
     ref_element = from_numpy(atom_element).long()
     ref_charge = from_numpy(atom_charge).float()
-    ref_conf_restr = from_numpy(atom_data["conformer_restraint"].copy())
+    # Handle case where conformer_restraint field may not exist (e.g., when only using distance restraints)
+    if "conformer_restraint" in atom_data.dtype.names:
+        ref_conf_restr = from_numpy(atom_data["conformer_restraint"].copy())
+    else:
+        ref_conf_restr = from_numpy(np.zeros(len(atom_data), dtype=np.int32))
     ref_pos = from_numpy(atom_conformer).float()
     ref_space_uid = from_numpy(ref_space_uid)
     ref_chirality = from_numpy(atom_chirality).long()
