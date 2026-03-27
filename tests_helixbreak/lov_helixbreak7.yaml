@@ -1,0 +1,17 @@
+sequences:
+  - protein:
+      id: A
+      sequence: EFRATTLERIEKSFVITDPRLPDNPIIFVSDSFLQLTEYSREEILGRNCRFLQGPETDRATVRKIRDAIDNQTEVTVQLINYTKSGKKFWNVFHLQPMRDYKGDVQYFIGVQLDGTERLHGAAEREAVCLVKKTAFQIA
+
+restraints_config:
+  verbose: true
+  max_iter: 1000
+  method: "CG"
+  start_sigma: 999999
+  gpu: true
+
+  distance_restraints_config:
+    - atom_selection1: "(resid 121 and name CA)"
+      atom_selection2: "(resid 125 and name CA)"
+      flat-bottomed1:
+        target_distance1: 8
